@@ -21,11 +21,12 @@ export class GeminiService {
     });
   }
 
-  public async generateText(prompt: string) {
+  public async generateText(prompt: string): Promise<History> {
     try {
-      return await this.model.generateContent(prompt);
+      const { response } = await this.model.generateContent(prompt);
+      return JSON.parse(response.text());
     } catch (err: unknown) {
-      throw new BadRequestException(err);
+      throw new BadRequestException('Error generating history: ' + err);
     }
   }
 }
